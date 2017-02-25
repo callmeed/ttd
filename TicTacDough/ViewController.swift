@@ -41,6 +41,8 @@ class ViewController: UIViewController {
         [3, 5, 7]
     ]
     
+    // MARK: UIViewController overrides
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -51,17 +53,47 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    func debugBoard() {
-        // Prints board to console 
-        print("\(boardMatrix[0][0]) | \(boardMatrix[0][1]) | \(boardMatrix[0][2])")
-        print("_________")
-        print("\(boardMatrix[1][0]) | \(boardMatrix[1][1]) | \(boardMatrix[1][2])")
-        print("_________")
-        print("\(boardMatrix[2][0]) | \(boardMatrix[2][1]) | \(boardMatrix[2][2])")
+    // MARK: Utility functions for fetching values, tags, and coords
+    
+    func imageForPlayer() -> String {
+        switch currentPlayer {
+        case .Player1:
+            return "X"
+        case .Player2:
+            return "Pizza"
+        }
     }
     
+    func valueForPlayer() -> Int {
+        switch currentPlayer {
+        case .Player1:
+            return 1
+        case .Player2:
+            return 2
+        }
+    }
+    
+    // Gets [row, col] coords from tag (1 through 9)
+    func coordinatesFromTag(tag: Int) -> [Int] {
+        var coords = [Int]()
+        coords.append((tag - 1) / 3)
+        coords.append((tag - 1) % 3)
+        return coords
+    }
+    
+    func valueForTag(tag: Int) -> Int {
+        let coords = coordinatesFromTag(tag: tag)
+        let val = boardMatrix[coords[0]][coords[1]]
+        return val
+    }
+    
+    func spaceOpen(tag: Int) -> Bool {
+        return valueForTag(tag: tag) == 0
+    }
+    
+    // MARK: Main game logic for starting game, moves, and checking for winner
+    
     func resetBoard() {
-        // Starts a new game
         currentPlayer = Players.Player1
         boardMatrix = Array(repeating: Array(repeating: 0, count: 3), count: 3)
         moveCount = 0
@@ -75,8 +107,8 @@ class ViewController: UIViewController {
     }
     
     func checkForWinner() {
-        // Loop through all possible winning scenarios 
-        // and checks for a winner or cat's game 
+        // Loop through all possible winning scenarios
+        // and checks for a winner or cat's game
         var a = 0
         var b = 1
         var c = 2
@@ -104,7 +136,7 @@ class ViewController: UIViewController {
             infoLabel.text = "Cat's Game!"
         }
     }
-
+    
     func nextMove() {
         currentPlayer = (currentPlayer == Players.Player1) ? Players.Player2 : Players.Player1
         if currentPlayer == Players.Player1 {
@@ -115,40 +147,7 @@ class ViewController: UIViewController {
         moveCount += 1
     }
     
-    func imageForPlayer() -> String {
-        switch currentPlayer {
-        case .Player1:
-            return "X"
-        case .Player2:
-            return "Pizza"
-        }
-    }
-    
-    func valueForPlayer() -> Int {
-        switch currentPlayer {
-        case .Player1:
-            return 1
-        case .Player2:
-            return 2
-        }
-    }
-    
-    func coordinatesFromTag(tag: Int) -> [Int] {
-        var coords = [Int]()
-        coords.append((tag - 1) / 3)
-        coords.append((tag - 1) % 3)
-        return coords
-    }
-    
-    func valueForTag(tag: Int) -> Int {
-        let coords = coordinatesFromTag(tag: tag)
-        let val = boardMatrix[coords[0]][coords[1]]
-        return val
-    }
-    
-    func spaceOpen(tag: Int) -> Bool {
-        return valueForTag(tag: tag) == 0
-    }
+    // MARK: Actions for UIButtons in storyboard
     
     @IBAction func resetButtonPressed(_ sender: Any) {
         resetBoard()
@@ -169,6 +168,18 @@ class ViewController: UIViewController {
             print("This space is not open")
         }
     }
+    
+    // MARK: Debugging 
+    
+    // Prints board to console
+    func debugBoard() {
+        print("\(boardMatrix[0][0]) | \(boardMatrix[0][1]) | \(boardMatrix[0][2])")
+        print("_________")
+        print("\(boardMatrix[1][0]) | \(boardMatrix[1][1]) | \(boardMatrix[1][2])")
+        print("_________")
+        print("\(boardMatrix[2][0]) | \(boardMatrix[2][1]) | \(boardMatrix[2][2])")
+    }
 
+    
 }
 
