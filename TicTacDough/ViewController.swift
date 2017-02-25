@@ -61,6 +61,7 @@ class ViewController: UIViewController {
     }
     
     func resetBoard() {
+        // Starts a new game
         currentPlayer = Players.Player1
         boardMatrix = Array(repeating: Array(repeating: 0, count: 3), count: 3)
         moveCount = 0
@@ -74,6 +75,8 @@ class ViewController: UIViewController {
     }
     
     func checkForWinner() {
+        // Loop through all possible winning scenarios 
+        // and checks for a winner or cat's game 
         var a = 0
         var b = 1
         var c = 2
