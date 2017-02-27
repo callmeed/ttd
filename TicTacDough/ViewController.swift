@@ -27,7 +27,7 @@ class ViewController: UIViewController {
     @IBOutlet var infoLabel: UILabel!
     @IBOutlet var resetButton: UIButton!
     var currentPlayer = Players.Player1
-    var boardMatrix = Array(repeating: Array(repeating: 0, count: 3), count: 3)
+    var boardMatrix = Array(repeating: 0, count: 9)
     var moveCount = 0
     var gameOver = false
     let winningTags = [
@@ -73,17 +73,9 @@ class ViewController: UIViewController {
         }
     }
     
-    // Gets [row, col] coords from tag (1 through 9)
-    func coordinatesFromTag(tag: Int) -> [Int] {
-        var coords = [Int]()
-        coords.append((tag - 1) / 3)
-        coords.append((tag - 1) % 3)
-        return coords
-    }
-    
     func valueForTag(tag: Int) -> Int {
-        let coords = coordinatesFromTag(tag: tag)
-        let val = boardMatrix[coords[0]][coords[1]]
+        let index = tag - 1
+        let val = boardMatrix[index]
         return val
     }
     
@@ -95,7 +87,7 @@ class ViewController: UIViewController {
     
     func resetBoard() {
         currentPlayer = Players.Player1
-        boardMatrix = Array(repeating: Array(repeating: 0, count: 3), count: 3)
+        boardMatrix = Array(repeating: 0, count: 9)
         moveCount = 0
         for tag in 1...9 {
             if let btn = self.view.viewWithTag(tag) as? UIButton {
@@ -159,8 +151,8 @@ class ViewController: UIViewController {
             if let image = UIImage(named: imageForPlayer()) {
                 sender.setImage(image, for: .normal)
             }
-            let coords = coordinatesFromTag(tag: tag)
-            boardMatrix[coords[0]][coords[1]] = valueForPlayer()
+            let index = tag - 1
+            boardMatrix[index] = valueForPlayer()
             debugBoard()
             nextMove()
             checkForWinner()
@@ -173,11 +165,11 @@ class ViewController: UIViewController {
     
     // Prints board to console
     func debugBoard() {
-        print("\(boardMatrix[0][0]) | \(boardMatrix[0][1]) | \(boardMatrix[0][2])")
+        print("\(boardMatrix[0]) | \(boardMatrix[1]) | \(boardMatrix[2])")
         print("_________")
-        print("\(boardMatrix[1][0]) | \(boardMatrix[1][1]) | \(boardMatrix[1][2])")
+        print("\(boardMatrix[3]) | \(boardMatrix[4]) | \(boardMatrix[5])")
         print("_________")
-        print("\(boardMatrix[2][0]) | \(boardMatrix[2][1]) | \(boardMatrix[2][2])")
+        print("\(boardMatrix[6]) | \(boardMatrix[7]) | \(boardMatrix[8])")
     }
 
     
